@@ -1,0 +1,4 @@
+[
+  [">", {"numWrongAttempts": 1, "success": true}, {"numWrongAttempts": 0, "success": false}],
+  ["<", {"numWrongAttempts": 5, "success": true}, {"numWrongAttempts": 3, "success": false}]
+]
