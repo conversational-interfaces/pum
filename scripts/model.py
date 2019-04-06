@@ -1,5 +1,6 @@
 import json
 import numpy as np
+from sklearn import linear_model
 
 GT = '>'
 LT = '<'
@@ -10,7 +11,7 @@ class Fluent:
         self._type = type
         self._min = None
         self._max = None
-        self._resolution = 5
+        self._resolution = 6
 
     def __str__(self):
         return '[{}, {}]'.format(self._min, self._max)
@@ -36,11 +37,15 @@ class Fluent:
                 return True
             else:
                 return False
-        return self._resolution * (value - self._min) / (self._max - self._min)
+        #   self.fluent_vec_to_index(fluent_vec)
+        return (self._resolution - 1) * (value - self._min) / (self._max - self._min)
 
+    def get_value(self, index):
+        return self._min + (self._max - self._min) / (self._resolution - 1) * index
 
 class Model:
     def __init__(self, training_file):
+        self._regression_model = None
         self._fluent_dict = {}
         self._favorable_fluent_vectors = []
         self._unfavorable_fluent_vectors = []
@@ -65,38 +70,79 @@ class Model:
         shape = []
         for name, fluent in sorted(self._fluent_dict.items()):
             shape.append(len(fluent.range()))
-        tensor = np.zeros(shape) + np.nan
-        print(np.shape(tensor))
-        print(tensor)
+        self.tensor = np.zeros(shape) + np.nan
+        # print(np.shape(tensor))
+        print(self.tensor)
+        print("prefer fluents")
         for fluent_vec in self._favorable_fluent_vectors:
-            tensor[self.fluent_vec_to_index(fluent_vec)] = 1
+            self.tensor[self.fluent_vec_to_index(fluent_vec)] = 1
+        print("avoid fluents")
         for fluent_vec in self._unfavorable_fluent_vectors:
-            tensor[self.fluent_vec_to_index(fluent_vec)] = 0
-        print(tensor)
+            self.tensor[self.fluent_vec_to_index(fluent_vec)] = 0
+        print(self.tensor)
+
+        self.X = []
+        self.Y = []
+        for fluent_vec in self._favorable_fluent_vectors:
+            self.X.append(self.fluent_vec_to_np_vec(fluent_vec))
+            self.Y.append(1)
+        for fluent_vec in self._unfavorable_fluent_vectors:
+            self.X.append(self.fluent_vec_to_np_vec(fluent_vec))
+            self.Y.append(0)
 
     def fluent_vec_to_index(self, fluent_vec):
         indices = []
         for name, value in sorted(fluent_vec.items()):
             index = int(self._fluent_dict[name].get_idx(value))
-            print('{} -> {}'.format(value, index))
+            # print('{} -> {}'.format(value, index))
             indices.append(index)
         print(fluent_vec, indices)
-        return indices
+        return tuple(indices)
+
+    def fluent_vec_to_np_vec(self, fluent_vec):
+        vec = []
+        for name, value in sorted(fluent_vec.items()):
+            vec.append(int(value))
+        return np.array(vec)
+
+    def index_to_np_vec(self, indices):
+        values = []
+        sorted_fluents = sorted(self._fluent_dict.items())
+        for i, index in enumerate(indices):
+            values.append(sorted_fluents[i][1].get_value(index))
+        return np.array(values)
 
     def print_status(self):
         for name, fluent in self._fluent_dict.items():
             print(name, fluent)
 
     def train(self):
-        pass
+        print("start training")
+        self._regression_model = linear_model.LinearRegression()
+        self._regression_model.fit(self.X, self.Y)
+
+        print(self._regression_model.coef_)
+        print(self._regression_model.intercept_)
+
+        print("-----")
 
     def test(self, fluent_vector):
-        return 0
+        print(fluent_vector)
+        x = self.fluent_vec_to_np_vec(fluent_vector)
+        return self._regression_model.predict(np.reshape(x, (1, -1)))
+
+    def test2(self):
+        ret = np.zeros_like(self.tensor)
+        for index in np.ndindex(self.tensor.shape):
+            x = self.index_to_np_vec(index)
+            ret[index] = self._regression_model.predict(np.reshape(x, (1, -1)))
+        print(ret)
 
 
 if __name__ == '__main__':
     model = Model(training_file='pairs.json')
     model.print_status()
     model.train()
+    model.test2()
     utility = model.test({'numWrongAttempts': 0, 'success': True})
     print(utility)
