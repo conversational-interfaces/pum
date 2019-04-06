@@ -41,6 +41,11 @@ class Fluent:
         return (self._resolution - 1) * (value - self._min) / (self._max - self._min)
 
     def get_value(self, index):
+        if self._type is bool:
+            if index:
+                return True
+            else:
+                return False
         return self._min + (self._max - self._min) / (self._resolution - 1) * index
 
 class Model:
@@ -143,6 +148,7 @@ if __name__ == '__main__':
     model = Model(training_file='pairs.json')
     model.print_status()
     model.train()
-    model.test2()
     utility = model.test({'numWrongAttempts': 0, 'success': True})
     print(utility)
+    model.test2()
+
