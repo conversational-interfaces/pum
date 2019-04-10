@@ -1,0 +1,3 @@
+[submodule "scripts/libsvm"]
+	path = scripts/libsvm
+	url = https://github.com/cjlin1/libsvm.git

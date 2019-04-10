@@ -1,6 +1,10 @@
 import json
 import numpy as np
-from sklearn import linear_model
+from sklearn import svm
+from libsvm.python.svmutil import *
+
+# from sklearn.svm import libsvm
+
 
 GT = '>'
 LT = '<'
@@ -50,7 +54,7 @@ class Fluent:
 
 class Model:
     def __init__(self, training_file):
-        self._regression_model = None
+        self._model = None
         self._fluent_dict = {}
         self._favorable_fluent_vectors = []
         self._unfavorable_fluent_vectors = []
@@ -95,6 +99,9 @@ class Model:
         print(fluent_vec, indices)
         return tuple(indices)
 
+    def save(self, path):
+        svm_save_model(path, self._model)
+
     def fluent_vec_to_np_vec(self, fluent_vec):
         vec = []
         for name, value in sorted(fluent_vec.items()):
@@ -124,24 +131,44 @@ class Model:
                 X.append(np.array(index))
                 y.append(val)
 
-        self._regression_model = linear_model.LinearRegression()
-        self._regression_model.fit(X, y)
+        self._model = svm_train(y, X, '-s 3 -t 2')
+        # self._model = linear_model.LinearRegression()
+        # self._model = svm.SVR()
+        # self._model.fit(X, y)
 
-        print(self._regression_model.coef_)
-        print(self._regression_model.intercept_)
+        # print(self._model.coef_)
+        # print(self._model.intercept_)
 
         print("-----")
 
     def test(self, fluent_vector):
         print(fluent_vector)
         x = self.fluent_vec_to_np_vec(fluent_vector)
-        return self._regression_model.predict(np.reshape(x, (1, -1)))
+        # return svm_predict()
+
+        return svm_predict([], np.reshape(x, (1, -1)), self._model)
+        # return self._model.predict(np.reshape(x, (1, -1)))
+        # return self.predict(x)
+
+    # def predict(self, x):
+    #     return libsvm.predict(
+    #         self._model._validate_for_predict(np.reshape(x, (1, -1))),
+    #         self._model.support_, self._model.support_vectors_, self._model.n_support_,
+    #         self._model._dual_coef_, self._model._intercept_,
+    #         self._model.probA_, self._model.probB_, svm_type=3, kernel=self._model.kernel,  # type = epsilon SVR
+    #         degree=self._model.degree,
+    #         coef0=self._model.coef0,
+    #         gamma=self._model._gamma,
+    #         cache_size=self._model.cache_size)
 
     def test2(self):
         ret = np.zeros_like(self.input_tensor)
         for index in np.ndindex(self.input_tensor.shape):
             x = self.index_to_np_vec(index)
-            ret[index] = self._regression_model.predict(np.reshape(x, (1, -1)))
+            # ret[index] = self.predict(x)
+            # ret[index] = self._model.predict(np.reshape(x, (1, -1)))
+            p_labs, p_acc, p_vals = svm_predict([], np.reshape(x, (1, -1)), self._model)
+            ret[index] = p_labs[0]
         print(ret)
 
     def floodfill(self, input_tensor):  # input tensor is not modified
@@ -186,4 +213,4 @@ if __name__ == '__main__':
     utility = model.test({'numWrongAttempts': 0, 'success': True})
     print(utility)
     model.test2()
-
+    model.save("libsvm.model")
