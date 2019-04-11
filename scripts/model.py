@@ -3,9 +3,6 @@ import numpy as np
 from sklearn import svm
 from libsvm.python.svmutil import *
 
-# from sklearn.svm import libsvm
-
-
 GT = '>'
 LT = '<'
 
@@ -136,38 +133,20 @@ class Model:
         # self._model = svm.SVR()
         # self._model.fit(X, y)
 
-        # print(self._model.coef_)
-        # print(self._model.intercept_)
-
         print("-----")
 
     def test(self, fluent_vector):
         print(fluent_vector)
         x = self.fluent_vec_to_np_vec(fluent_vector)
-        # return svm_predict()
-
-        return svm_predict([], np.reshape(x, (1, -1)), self._model)
+        return svm_predict([], np.reshape(x, (1, -1)), self._model, '-q')
         # return self._model.predict(np.reshape(x, (1, -1)))
-        # return self.predict(x)
-
-    # def predict(self, x):
-    #     return libsvm.predict(
-    #         self._model._validate_for_predict(np.reshape(x, (1, -1))),
-    #         self._model.support_, self._model.support_vectors_, self._model.n_support_,
-    #         self._model._dual_coef_, self._model._intercept_,
-    #         self._model.probA_, self._model.probB_, svm_type=3, kernel=self._model.kernel,  # type = epsilon SVR
-    #         degree=self._model.degree,
-    #         coef0=self._model.coef0,
-    #         gamma=self._model._gamma,
-    #         cache_size=self._model.cache_size)
 
     def test2(self):
         ret = np.zeros_like(self.input_tensor)
         for index in np.ndindex(self.input_tensor.shape):
             x = self.index_to_np_vec(index)
-            # ret[index] = self.predict(x)
             # ret[index] = self._model.predict(np.reshape(x, (1, -1)))
-            p_labs, p_acc, p_vals = svm_predict([], np.reshape(x, (1, -1)), self._model)
+            p_labs, _, _ = svm_predict([], np.reshape(x, (1, -1)), self._model, '-q')
             ret[index] = p_labs[0]
         print(ret)
 

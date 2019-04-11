@@ -1,0 +1,4 @@
+[
+  ["<", {"know_pond": true, "ask_tree": true}, {"know_pond": true, "ask_tree": false}],
+  ["<", {"know_pond": true, "ask": true}, {"know_pond": false, "know_tree": false, "ask": true}]
+]
