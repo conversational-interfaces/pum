@@ -27,7 +27,11 @@ code {
     text-align: left;
 }
 
-pre.examples{
-    background-color: rgb(204,204,255);
+#preferences, #configs, #rankings{
+    padding: .5em;
+    border-left-width: .5em;
+    border-left-style: solid;
+    border-color: #e0cb52;
+    background: #fcfaee;
 }
 

@@ -15,8 +15,13 @@
         specStatus: "CG-DRAFT",
         shortName: "pum",
         editors: [{
-          name: "Nishant Shukla"
-        }],
+          name: "Nishant Shukla",
+          url: "https://shukla.io/",},
+          {
+            name: "Nelson Solano",
+            url: "https://www.linkedin.com/in/nelson-solano-24a935126/",
+          }
+        ],
         authors: [],
         edDraftURI: "https://github.com/conversational-interfaces/pum",
         addSectionLinks: true,
@@ -31,25 +36,177 @@
 
     <section id='abstract'>
       <p>
+        This specification defines the syntax and semantics for utility model's that are used to create and
+        drive conversational experiences.
       </p>
     </section>
 
     <section id='sotd'></section>
 
-    <section id="conformance"></section>
-
     <section>
       <h2>Introduction</h2>
     </section>
+    <section>
+      <h2>Utility Model Format</h2>
+      <section data-dfn-for="Utility" data-link-for="Utility">
+        <h2><dfn>Utility</dfn> interface</h2>
+        <i>This section is normative.</i>
+        <pre class="idl">
+        interface Utility {
+          attribute Pairs preferences;
+        };
+      </pre>
+        <section>
+          <h3><dfn>preferences</dfn> attribute</h3>
+          <p>
+            The <a>preferences</a> attribute specifies a <a>Pairs</a> object denoting a ranking configuration of all
+            provided examples. It is specified in a <code>key:value</code> manner where <code>key</code> always takes on
+            the value <code>utility</code> and <code>value</code> is a <a>Config</a> of pairings.
+          </p>
+        </section>
+        <pre id="preferences">
+          "utility": "[Pair]"
+        </pre>
+      </section>
+
+      <section data-dfn-for="Pairs" data-link-for="Pairs">
+        <h2><dfn>Pairs</dfn> interface</h2>
+        <pre class="idl">
+        interface Pairs {
+          attribute Config configs;
+        };
+        </pre>
+        <section>
+          <h3><dfn>configs</dfn> attribute</h3>
+          <p>
+            The <a>configs</a> attribute specifies an tuple of <a>Config</a> objects. For the sake of simplicity we
+            assume that the first <a>Config</a> object has higher utlity value than the second <a>Config</a> object.
+          </p>
+          <pre id="configs">
+            "configs": "[firstConfig, secondConfig]"
+          </pre>
+        </section>
+      </section>
+
+      <section data-dfn-for="Config" data-link-for="Config">
+        <h2><dfn>Config</dfn> interface</h2>
+        <pre class="idl">
+        interface Config {
+          attribute String rankings;
+        };
+      </pre>
+        <section>
+          <h3><dfn>rankings</dfn> attribute</h3>
+          <p>
+            The <a>rankings</a> attribute specifies a list containing any number of examples corresponding to desired
+            outcomes.
+          </p>
+          <pre id="rankings">
+            [
+              [{numWrongAttempts: 1, success: true}, {numWrongAttempts: 0, success: false}],
+              [{numWrongAttempts: 5, success: true}, {numWrongAttempts: 3, success: false}],
+            ]
+          </pre>
+        </section>
+      </section>
+
+      <section data-dfn-for="Name">
+        <h2><code><dfn>Name</dfn></code></h2>
+        <p>
+          A <a>name</a> is a sequence of characters conforming to those in the XML standard.
+        </p>
+        <blockquote>
+	            <pre>
+	                <a>name</a> ::= [ <a href="http://www.w3.org/TR/xml-names/#NT-NCName">http://www.w3.org/TR/xml-names/#NT-NCName</a> ]
+                </pre>
+        </blockquote>
+        <figure id="name-railroad">
+          <img src="diagrams/name.png" alt="Name rail-road diagram">
+          <figcaption>Name</figcaption>
+        </figure>
+      </section>
+
+      <section data-dfn-for="String">
+        <h2><code><dfn>String</dfn></code></h2>
+        <p>
+          A <a>string</a> literal represents a finite sequence of characters.
+          It is surrounded by starting and ending quotation marks.
+        </p>
+        <blockquote>
+	            <pre>
+	                <a>string</a> :: = '"' <a>name</a> '"'
+                </pre>
+        </blockquote>
+        <figure id="string-railroad">
+          <img src="diagrams/string.png" alt="String railroad diagram">
+          <figcaption>String</figcaption>
+        </figure>
+      </section>
+
+
+    </section>
 
     <section>
-      <h2>Example</h2>
+      <h2>Examples</h2>
+      <i>This section is informative.</i>
+      <p>
+        In the following example showcases an example where a higher number of wrong attempts has higher utility
+        value the its corresponding paired object.
+      </p>
       <pre class="example">
-	[
-	  [">", {numWrongAttempts: 1, success: true}, {numWrongAttempts: 0, success: false}],
-	  ["<", {numWrongAttempts: 5, success: true}, {numWrongAttempts: 3, success: false}],
-	]
+        [
+          [{numWrongAttempts: 1, success: true}, {numWrongAttempts: 0, success: false}],
+          [{numWrongAttempts: 5, success: true}, {numWrongAttempts: 3, success: false}],
+        ]
       </pre>
+
+      <p>
+        The following example showcases an instance where animating the Pig and Frog characters has higher utility than
+        not when it comes to starting a game.
+      </p>
+      <pre class="example">
+        [
+            [
+              {
+                "`is_pig_visible`": true,
+                "`start_game`": true
+              },
+              {
+                "`is_pig_visible`": false,
+                "`start_game`": true
+              }
+            ],
+            [
+              {
+                "`is_frog_visible`": true,
+                "`start_game`": true
+              },
+              {
+                "`is_frog_visible`": false,
+                "`start_game`": true
+              }
+            ],
+            [
+              {
+                "`is_fox_visible`": true,
+                "`start_game`": true
+              },
+              {
+                "`is_fox_visible`": false,
+                "`start_game`": true
+              }
+            ]
+        ]
+      </pre>
+
+
+    </section>
+
+    <section id="conformance"></section>
+
+    <section>
+      <h2>References</h2>
+      <i>This section is informative.</i>
     </section>
 
   </body>
