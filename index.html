@@ -37,15 +37,40 @@
     <section id='abstract'>
       <p>
         This specification defines the syntax and semantics for utility model's that are used to create and
-        drive conversational experiences.
+        drive conversational experiences. Utility Models allow authors to encode preferences over states of the world;
+        enabling languages such as <a href="https://www.w3.org/2019/04/dmpl/">DMPL</a> to autonomously drive agents
+        towards settings with the highest possible utility.
       </p>
     </section>
 
-    <section id='sotd'></section>
+    <section>
+      <h2>Conformance</h2>
+      <p>
+        As well as sections marked as non-normative, all authoring guidelines, diagrams, examples, and notes in this
+        specification are non-normative. Everything else in this specification is normative.
+      </p>
+    </section>
 
     <section>
       <h2>Introduction</h2>
+      <section>
+        <h2>Scope</h2>
+        <i>This section is informative.</i>
+        <p>
+          This document is limited to specifying the syntax and semantics of designing and incorporating utility
+          into any task-oriented programming language. One example application of Utility Models arises in chat-bot
+          settings where authors are able to specify preferences between interactions allowing for a more fluid and
+          dynamic conversation.
+        </p>
+      </section>
+
+      <section>
+        <h2>Goals and Motivation</h2>
+        <i>This section is informative.</i>
+      </section>
     </section>
+
+
     <section>
       <h2>Utility Model Format</h2>
       <section data-dfn-for="Utility" data-link-for="Utility">
@@ -99,7 +124,8 @@
           <h3><dfn>rankings</dfn> attribute</h3>
           <p>
             The <a>rankings</a> attribute specifies a list containing any number of examples corresponding to desired
-            outcomes.
+            outcomes. As mentioned in the <a>Pairs</a> interface, the first specified item of each list is assumed to
+            have higher user preferences then its corresponding pair.
           </p>
           <pre id="rankings">
             [
@@ -150,8 +176,9 @@
       <h2>Examples</h2>
       <i>This section is informative.</i>
       <p>
-        In the following example showcases an example where a higher number of wrong attempts has higher utility
-        value the its corresponding paired object.
+        In a setting where a client is autonomously attempting to effectively teach a user a, for example mathematical
+        concept, clients are able to specify the preferences of the states. In this case we've specified that a higher
+        count of wrong attempts is preferred over a lower count, as this shows the user is at least attempting to learn.
       </p>
       <pre class="example">
         [
@@ -161,8 +188,8 @@
       </pre>
 
       <p>
-        The following example showcases an instance where animating the Pig and Frog characters has higher utility than
-        not when it comes to starting a game.
+        Being able to assign utility allows us to indirectly specify a desired trajectory in which animating all characters
+        in a game setting has higher preferences than beginning the game.
       </p>
       <pre class="example">
         [
@@ -199,14 +226,131 @@
         ]
       </pre>
 
+      <p>
+        When designing the utilities, the paired preferences do not have to belong to the same topic. By providing a
+        variety of examples, the utility model is able to generalize to a richer interactive experience.
+      </p>
+      <pre class="example">
+        [
+            [
+              {
+                "`start_game`": true
+              },
+              {
+                "`start_game`": false
+              }
+            ],
+            [
+              {
+                "`start_game`": true,
+                "`know_name`": true
+              },
+              {
+                "`start_game`": false,
+                "`know_name`": false
+              }
+            ],
+            [
+              {
+                "`start_game`": true,
+                "`say_welcome`": true
+              },
+              {
+                "`start_game`": false,
+                "`say_welcome`": false
+              }
+            ],
+            [
+              {
+                "`remark_current_event`": true
+              },
+              {
+                "`remark_current_event`": false
+              }
+            ],
+            [
+              {
+                "`remark_day_of_week`": true
+              },
+              {
+                "`remark_day_of_week`": false
+              }
+            ],
+            [
+              {
+                "`remark_day`": true
+              },
+              {
+                "`remark_day`": false
+              }
+            ],
+            [
+              {
+                "`remark_weather`": true
+              },
+              {
+                "`remark_weather`": false
+              }
+            ],
+            [
+              {
+                "`remark_last_seen`": true
+              },
+              {
+                "`remark_last_seen`": false
+              }
+            ],
+            [
+              {
+                "`user_knows_name`": true
+              },
+              {
+                "`user_knows_name`": false
+              }
+            ],
+            [
+              {
+                "`asked_name_reminder`": true
+              },
+              {
+                "`asked_name_reminder`": false
+              }
+            ],
+            [
+              {
+                "`num_interaction`": 3
+              },
+              {
+                "`num_interaction`": 12
+              }
+            ],
+            [
+              {
+                "`num_interaction`": 3
+              },
+              {
+                "`num_interaction`": -6
+              }
+            ]
+          ]
+      </pre>
+
 
     </section>
 
-    <section id="conformance"></section>
+    <section>
+      <h2>Related Technologies</h2>
+      <i>This section is interactive</i>
+    </section>
 
     <section>
       <h2>References</h2>
       <i>This section is informative.</i>
+      <p>
+        The railroad diagrams used above were generated using a <a href="https://bottlecaps.de/rr/ui">railroad diagram
+        generator.</a> In the above sections we also refer to <a href="https://www.w3.org/2019/04/dmpl/">Dialogue Manager
+        Programming Language</a> as <a href="https://www.w3.org/2019/04/dmpl/">DMPL</a>.
+      </p>
     </section>
 
   </body>
