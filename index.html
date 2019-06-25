@@ -107,11 +107,13 @@
         <section>
           <h3><dfn>configs</dfn> attribute</h3>
           <p>
-            The <a>configs</a> attribute specifies an tuple of <a>Config</a> objects. For the sake of simplicity we
-            assume that the first <a>Config</a> object has higher utlity value than the second <a>Config</a> object.
+            The <a>configs</a> attribute specifies an list of two or more <a>Config</a> objects. For the sake of
+            simplicity we assume the list of <a>Config</a> objects is ordered in descending order of utility. That is, the
+            leftmost <a>Config</a> object has the highest assigned utility, while the rightmost <a>Config</a> object has
+            the smallest assigned utility.
           </p>
           <pre id="configs">
-            "configs": "[firstConfig, secondConfig]"
+            "configs": "[firstConfig, secondConfig, ...]"
           </pre>
         </section>
       </section>
@@ -354,7 +356,8 @@
         generator.</a> In the above sections we also refer to <a href="https://www.w3.org/2019/04/dmpl/">Dialogue Manager
         Programming Language</a> as <a href="https://www.w3.org/2019/04/dmpl/">DMPL</a>. The utility model defined above
         aligns with work done in <a href="https://escholarship.org/uc/item/1j58g9gx">A Unified Knowledge Representation
-        System for Robot Leraning and Diagloe</a> by <a href="https://shukla.io/">Dr. Nishant Shukla.</a>
+        System for Robot Leraning and Diagloe</a> by <a href="https://shukla.io/">Dr. Nishant Shukla.</a> The primitive
+        data types defined within this spec were influenced by <a href="https://bit.ly/2H35fx3">ISO/IEC 11404.</a>
 
       </p>
     </section>
