@@ -9,6 +9,21 @@
             class='remove'></script>
     <script class='remove'>
         let respecConfig = {
+            localBiblio: {
+                "Nishant Shukla": {
+                    title: "A Unified Knowledge Representation\n" +
+                        "        System for Robot Learning and Dialogue",
+                    href: "https://escholarship.org/uc/item/1j58g9gx",
+                    publisher: "eScholarship",
+                },
+                "DMPL": {
+                    title: "Dialogue Manager Programming Language",
+                    href: "https://www.w3.org/2019/04/dmpl/",
+                    status: "W3C CG-FINAL",
+                    date: "16 April, 2019",
+                    publisher: "W3C",
+                }
+            },
             wg: "Conversational Interfaces Working Group",
             wgURI: "https://www.w3.org/community/conv/",
             wgPublicList: "public-conv",
@@ -36,10 +51,11 @@
 
 <section id='abstract'>
     <p>
-        This specification defines the syntax and semantics for utility model's that are used to create and
-        drive conversational experiences. Utility Models allow authors to encode preferences over states of the world;
-        enabling languages such as <a href="https://www.w3.org/2019/04/dmpl/">DMPL</a> to autonomously drive agents
-        towards settings with the highest possible utility.
+        This specification defines the syntax and semantics for <code><dfn data-cite="!Nishant Shukla#">
+        Utility Models</dfn></code> that are used to create and drive conversational experiences. Utility Models allow
+        authors to encode preferences over states of the world; enabling languages such as
+        <code><dfn data-cite="!DMPL#">DMPL</dfn></code> to autonomously drive agents towards settings with the highest
+        possible utility.
     </p>
 </section>
 
@@ -136,7 +152,15 @@
         interface Config : Dictionary {
         };
       </pre>
-        <section>
+        <p>
+            The <a>Config</a> interface specifies a dictionary of key value pairs denoting the environmental settings.
+            The <code><dfn data-cite="!WebIDL-20161215/#idl-dictionary">Dictionary</dfn></code> type is defined in
+            [[[WebIDL-20161215]]].
+        </p>
+        <pre id="settings">
+                {numWrongAttempts: 1, success: true}
+          </pre>
+        <!--<section>
             <h3>Config</h3>
             <p>
                 The <a>Config</a> interface specifies a dictionary of key value pairs denoting the environmental settings.
@@ -146,13 +170,16 @@
             <pre id="settings">
                 {numWrongAttempts: 1, success: true}
           </pre>
-        </section>
+        </section>-->
     </section>
 
     <section data-dfn-for="Name">
         <h2><code><dfn>Name</dfn></code></h2>
         <p>
-            A <a>name</a> is a sequence of characters conforming to those in the XML standard.
+            A <a>name</a> is a sequence of characters conforming to those in the
+            <code><dfn data-cite="!xml/#idl-dictionary">XML</dfn></code> standard [[xml]]. Below is an example with along
+            with its corresponding <code><a href="https://bottlecaps.de/rr/ui">railroad diagram</a></code>.
+
         </p>
         <blockquote>
 	            <pre>
@@ -169,7 +196,8 @@
         <h2><code><dfn>String</dfn></code></h2>
         <p>
             A <a>string</a> literal represents a finite sequence of characters.
-            It is surrounded by starting and ending quotation marks.
+            It is surrounded by starting and ending quotation marks. Below is an example with along
+            with its corresponding <code><a href="https://bottlecaps.de/rr/ui">railroad diagram</a></code>.
         </p>
         <blockquote>
 	            <pre>
@@ -356,7 +384,7 @@
     <i>This section is interactive</i>
 </section>
 
-<section>
+<!--<section>
     <h2>References</h2>
     <i>This section is informative.</i>
     <p>
@@ -368,7 +396,11 @@
         data types defined within this spec were influenced by <a href="https://bit.ly/2H35fx3">ISO/IEC 11404.</a>
 
     </p>
-</section>
+</section>-->
+
+<!--The <a>Config</a> interface specifies a dictionary of key value pairs denoting the environmental settings.
+The <code><dfn data-cite="!WebIDL-20161215/#idl-dictionary">Dictionary</dfn></code> type is defined in
+[[WebIDL-20161215]].-->
 
 </body>
 </html>
