@@ -1,82 +1,82 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset='utf-8'>
     <title>Personal Utility Model</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
     <script
-      src='https://www.w3.org/Tools/respec/respec-w3c-common'
-      class='remove'></script>
+            src='https://www.w3.org/Tools/respec/respec-w3c-common'
+            class='remove'></script>
     <script class='remove'>
-      let respecConfig = {
-        wg: "Conversational Interfaces Working Group",
-        wgURI: "https://www.w3.org/community/conv/",
-        wgPublicList: "public-conv",
-        specStatus: "CG-DRAFT",
-        shortName: "pum",
-        editors: [{
-          name: "Nishant Shukla",
-          url: "https://shukla.io/",},
-          {
-            name: "Nelson Solano",
-            url: "https://www.linkedin.com/in/nelson-solano-24a935126/",
-          }
-        ],
-        authors: [],
-        edDraftURI: "https://github.com/conversational-interfaces/pum",
-        addSectionLinks: true,
-        isPreview: true,
-        lint: {
-          "check-punctuation": true
-        }
-      };
+        let respecConfig = {
+            wg: "Conversational Interfaces Working Group",
+            wgURI: "https://www.w3.org/community/conv/",
+            wgPublicList: "public-conv",
+            specStatus: "CG-DRAFT",
+            shortName: "pum",
+            editors: [{
+                name: "Nishant Shukla",
+                url: "https://shukla.io/",},
+                {
+                    name: "Nelson Solano",
+                    url: "https://www.linkedin.com/in/nelson-solano-24a935126/",
+                }
+            ],
+            authors: [],
+            edDraftURI: "https://github.com/conversational-interfaces/pum",
+            addSectionLinks: true,
+            isPreview: true,
+            lint: {
+                "check-punctuation": true
+            }
+        };
     </script>
-  </head>
-  <body>
+</head>
+<body>
 
-    <section id='abstract'>
-      <p>
+<section id='abstract'>
+    <p>
         This specification defines the syntax and semantics for utility model's that are used to create and
         drive conversational experiences. Utility Models allow authors to encode preferences over states of the world;
         enabling languages such as <a href="https://www.w3.org/2019/04/dmpl/">DMPL</a> to autonomously drive agents
         towards settings with the highest possible utility.
-      </p>
-    </section>
+    </p>
+</section>
 
-    <section id='sotd'>
-    </section>
+<section id='sotd'>
+</section>
 
-    <section>
-      <h2>Conformance</h2>
-      <p>
+<section>
+    <h2>Conformance</h2>
+    <p>
         As well as sections marked as non-normative, all authoring guidelines, diagrams, examples, and notes in this
         specification are non-normative. Everything else in this specification is normative.
-      </p>
-    </section>
+    </p>
+</section>
 
+<section>
+    <h2>Introduction</h2>
     <section>
-      <h2>Introduction</h2>
-      <section>
         <h2>Scope</h2>
         <i>This section is informative.</i>
         <p>
-          This document is limited to specifying the syntax and semantics of designing and incorporating utility
-          into any task-oriented programming language. One example application of Utility Models arises in chat-bot
-          settings where authors are able to specify preferences between interactions allowing for a more fluid and
-          dynamic conversation.
+            This document is limited to specifying the syntax and semantics of designing and incorporating utility
+            into any task-oriented programming language. One example application of Utility Models arises in chat-bot
+            settings where authors are able to specify preferences between interactions allowing for a more fluid and
+            dynamic conversation.
         </p>
-      </section>
-
-      <section>
-        <h2>Goals and Motivation</h2>
-        <i>This section is informative.</i>
-      </section>
     </section>
 
-
     <section>
-      <h2>Utility Model Format</h2>
-      <section data-dfn-for="Utility" data-link-for="Utility">
+        <h2>Goals and Motivation</h2>
+        <i>This section is informative.</i>
+    </section>
+</section>
+
+
+<section>
+    <h2>Utility Model Format</h2>
+    <section data-dfn-for="Utility" data-link-for="Utility">
         <h2><dfn>Utility</dfn> interface</h2>
         <i>This section is normative.</i>
         <pre class="idl">
@@ -85,66 +85,74 @@
         };
       </pre>
         <section>
-          <h3><dfn>preferences</dfn> attribute</h3>
-          <p>
-            The <a>preferences</a> attribute specifies a <a>Pairs</a> object denoting a ranking configuration of all
-            provided examples. It is specified in a <code>key:value</code> manner where <code>key</code> always takes on
-            the value <code>utility</code> and <code>value</code> is a <a>Config</a> of pairings.
-          </p>
+            <h3><dfn>preferences</dfn> attribute</h3>
+            <p>
+                The <a>preferences</a> attribute specifies a <a>Pairs</a> object denoting a ranking configuration of all
+                provided examples. It is specified in a <code>key:value</code> manner where <code>key</code> always takes on
+                the value <code>utility</code> and <code>value</code> is a pairing of <a>Config</a> objects.
+            </p>
         </section>
         <pre id="preferences">
           "utility": "[Pair]"
         </pre>
-      </section>
+    </section>
 
-      <section data-dfn-for="Pairs" data-link-for="Pairs">
+    <section data-dfn-for="Pairs" data-link-for="Pairs">
         <h2><dfn>Pairs</dfn> interface</h2>
         <pre class="idl">
-        interface Pairs {
-          attribute Config configs;
-        };
+            typedef sequence< Config > configSequence;
+
+            interface Pairs {
+            attribute configSequence configs;
+            };
         </pre>
         <section>
-          <h3><dfn>configs</dfn> attribute</h3>
-          <p>
-            The <a>configs</a> attribute specifies an list of two or more <a>Config</a> objects. For the sake of
-            simplicity we assume the list of <a>Config</a> objects is ordered in descending order of utility. That is, the
-            leftmost <a>Config</a> object has the highest assigned utility, while the rightmost <a>Config</a> object has
-            the smallest assigned utility.
-          </p>
-          <pre id="configs">
+            <h3><dfn>configs</dfn> attribute</h3>
+            <p>
+                The <a>configs</a> attribute specifies an list of two or more <a>Config</a> objects. For the sake of
+                simplicity we assume the list of <a>Config</a> objects is ordered in descending order of utility. That is, the
+                leftmost <a>Config</a> object has the highest assigned utility, while the rightmost <a>Config</a> object has
+                the smallest assigned utility.
+            </p>
+            <pre id="configs">
             "configs": "[firstConfig, secondConfig, ...]"
           </pre>
         </section>
-      </section>
+        <section data-link-for="configSequence" data-cite="configSequence">
+            <h2><code>configSequence</code> typedef</h2>
+            <p>
+                The <code><dfn data-cite="!WebIDL-20161215/#es-sequence">configSequence</dfn></code> data type refers to
+                a custom <code><dfn data-cite="!WebIDL-20161215/#idl-typedefs">typedef</dfn></code> of the
+                <code><dfn data-cite="!WebIDL-20161215/#es-sequence">sequence</dfn></code> type is defined in
+                [[WebIDL-20161215]].
+            </p>
+        </section>
 
-      <section data-dfn-for="Config" data-link-for="Config">
+    </section>
+
+    <section data-dfn-for="Config" data-link-for="Config">
         <h2><dfn>Config</dfn> interface</h2>
         <pre class="idl">
-        interface Config {
-          attribute String rankings;
+        interface Config : Dictionary {
         };
       </pre>
         <section>
-          <h3><dfn>rankings</dfn> attribute</h3>
-          <p>
-            The <a>rankings</a> attribute specifies a list containing any number of examples corresponding to desired
-            outcomes. As mentioned in the <a>Pairs</a> interface, the first specified item of each list is assumed to
-            have higher user preferences then its corresponding pair.
-          </p>
-          <pre id="rankings">
-            [
-              [{numWrongAttempts: 1, success: true}, {numWrongAttempts: 0, success: false}],
-              [{numWrongAttempts: 5, success: true}, {numWrongAttempts: 3, success: false}],
-            ]
+            <h3>Config</h3>
+            <p>
+                The <a>Config</a> interface specifies a dictionary of key value pairs denoting the environmental settings.
+                The <code><dfn data-cite="!WebIDL-20161215/#idl-dictionary">Dictionary</dfn></code> type is defined in
+                [[WebIDL-20161215]].
+            </p>
+            <pre id="settings">
+                {numWrongAttempts: 1, success: true}
           </pre>
         </section>
-      </section>
+    </section>
 
-      <section data-dfn-for="Name">
+    <section data-dfn-for="Name">
         <h2><code><dfn>Name</dfn></code></h2>
         <p>
-          A <a>name</a> is a sequence of characters conforming to those in the XML standard.
+            A <a>name</a> is a sequence of characters conforming to those in the XML standard.
         </p>
         <blockquote>
 	            <pre>
@@ -152,16 +160,16 @@
                 </pre>
         </blockquote>
         <figure id="name-railroad">
-          <img src="diagrams/name.png" alt="Name rail-road diagram">
-          <figcaption>Name</figcaption>
+            <img src="diagrams/name.png" alt="Name rail-road diagram">
+            <figcaption>Name</figcaption>
         </figure>
-      </section>
+    </section>
 
-      <section data-dfn-for="String">
+    <section data-dfn-for="String">
         <h2><code><dfn>String</dfn></code></h2>
         <p>
-          A <a>string</a> literal represents a finite sequence of characters.
-          It is surrounded by starting and ending quotation marks.
+            A <a>string</a> literal represents a finite sequence of characters.
+            It is surrounded by starting and ending quotation marks.
         </p>
         <blockquote>
 	            <pre>
@@ -169,34 +177,34 @@
                 </pre>
         </blockquote>
         <figure id="string-railroad">
-          <img src="diagrams/string.png" alt="String railroad diagram">
-          <figcaption>String</figcaption>
+            <img src="diagrams/string.png" alt="String railroad diagram">
+            <figcaption>String</figcaption>
         </figure>
-      </section>
-
-
     </section>
 
-    <section>
-      <h2>Examples</h2>
-      <i>This section is informative.</i>
-      <p>
-        In a setting where a client is autonomously attempting to effectively teach a user a, for example mathematical
-        concept, clients are able to specify the preferences of the states. In this case we've specified that a higher
-        count of wrong attempts is preferred over a lower count, as this shows the user is at least attempting to learn.
-      </p>
-      <pre class="example">
+
+</section>
+
+<section>
+    <h2>Examples</h2>
+    <i>This section is informative.</i>
+    <p>
+        In a setting where a client is autonomously attempting to effectively teach a user, for example a mathematical
+        concept, clients are able to specify the preferences of the states. In this case we've specified that a lower
+        count of wrong attempts is preferred over a higher count, as this shows the user is at least attempting to learn.
+    </p>
+    <pre class="example">
         [
           [{numWrongAttempts: 1, success: true}, {numWrongAttempts: 0, success: false}],
-          [{numWrongAttempts: 5, success: true}, {numWrongAttempts: 3, success: false}],
+          [{numWrongAttempts: 3, success: false}, {numWrongAttempts: 5, success: true}],
         ]
       </pre>
 
-      <p>
+    <p>
         Being able to assign utility allows us to indirectly specify a desired trajectory in which animating all characters
         in a game setting has higher preferences than beginning the game.
-      </p>
-      <pre class="example">
+    </p>
+    <pre class="example">
         [
             [
               {
@@ -231,11 +239,11 @@
         ]
       </pre>
 
-      <p>
+    <p>
         When designing the utilities, the paired preferences do not have to belong to the same topic. By providing a
         variety of examples, the utility model is able to generalize to a richer interactive experience.
-      </p>
-      <pre class="example">
+    </p>
+    <pre class="example">
         [
             [
               {
@@ -341,17 +349,17 @@
       </pre>
 
 
-    </section>
+</section>
 
-    <section>
-      <h2>Related Technologies</h2>
-      <i>This section is interactive</i>
-    </section>
+<section>
+    <h2>Related Technologies</h2>
+    <i>This section is interactive</i>
+</section>
 
-    <section>
-      <h2>References</h2>
-      <i>This section is informative.</i>
-      <p>
+<section>
+    <h2>References</h2>
+    <i>This section is informative.</i>
+    <p>
         The railroad diagrams used above were generated using a <a href="https://bottlecaps.de/rr/ui">railroad diagram
         generator.</a> In the above sections we also refer to <a href="https://www.w3.org/2019/04/dmpl/">Dialogue Manager
         Programming Language</a> as <a href="https://www.w3.org/2019/04/dmpl/">DMPL</a>. The utility model defined above
@@ -359,8 +367,8 @@
         System for Robot Leraning and Diagloe</a> by <a href="https://shukla.io/">Dr. Nishant Shukla.</a> The primitive
         data types defined within this spec were influenced by <a href="https://bit.ly/2H35fx3">ISO/IEC 11404.</a>
 
-      </p>
-    </section>
+    </p>
+</section>
 
-  </body>
+</body>
 </html>
