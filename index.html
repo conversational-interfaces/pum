@@ -52,10 +52,9 @@
 <section id='abstract'>
     <p>
         This specification defines the syntax and semantics for <code><dfn data-cite="!Nishant Shukla#">
-        Utility Models</dfn></code> that are used to create and drive conversational experiences. Utility Models allow
-        authors to encode preferences over states of the world; enabling languages such as
-        <code><dfn data-cite="!DMPL#">DMPL</dfn></code> to autonomously drive agents towards settings with the highest
-        possible utility.
+        Utility Models</dfn></code> that are used to create and drive conversational experiences.
+        <a>Utility Models</a> allow authors to encode preferences over states of the world, enabling task-oriented
+        programming languages to autonomously drive agents towards settings with the highest possible utility.
     </p>
 </section>
 
@@ -72,6 +71,12 @@
 
 <section>
     <h2>Introduction</h2>
+    <i>This section is informative.</i>
+    <p>
+        This specification aims to establish a paradigm that allows for the authoring of value drive content to be used
+        in intelligent agent systems.
+    </p>
+
     <section>
         <h2>Scope</h2>
         <i>This section is informative.</i>
@@ -86,6 +91,9 @@
     <section>
         <h2>Goals and Motivation</h2>
         <i>This section is informative.</i>
+        <p>
+
+        </p>
     </section>
 </section>
 
@@ -96,20 +104,20 @@
         <h2><dfn>Utility</dfn> interface</h2>
         <i>This section is normative.</i>
         <pre class="idl">
-        interface Utility {
-          attribute Pairs preferences;
-        };
+            [Exposed=Window]
+            interface Utility {
+              attribute Pairs preferences;
+            };
       </pre>
         <section>
             <h3><dfn>preferences</dfn> attribute</h3>
             <p>
                 The <a>preferences</a> attribute specifies a <a>Pairs</a> object denoting a ranking configuration of all
-                provided examples. It is specified in a <code>key:value</code> manner where <code>key</code> always takes on
-                the value <code>utility</code> and <code>value</code> is a pairing of <a>Config</a> objects.
+                provided examples. See <a>Pairs</a> below.
             </p>
         </section>
-        <pre id="preferences">
-          "utility": "[Pair]"
+        <pre class="example">
+            Pair
         </pre>
     </section>
 
@@ -117,60 +125,62 @@
         <h2><dfn>Pairs</dfn> interface</h2>
         <pre class="idl">
             typedef sequence< Config > configSequence;
-
+            [Exposed=Window]
             interface Pairs {
-            attribute configSequence configs;
+                attribute configSequence configs;
             };
         </pre>
         <section>
             <h3><dfn>configs</dfn> attribute</h3>
             <p>
-                The <a>configs</a> attribute specifies an list of two or more <a>Config</a> objects. For the sake of
-                simplicity we assume the list of <a>Config</a> objects is ordered in descending order of utility. That is, the
-                leftmost <a>Config</a> object has the highest assigned utility, while the rightmost <a>Config</a> object has
-                the smallest assigned utility.
-            </p>
-            <pre id="configs">
-            "configs": "[firstConfig, secondConfig, ...]"
-          </pre>
-        </section>
-        <section data-link-for="configSequence" data-cite="configSequence">
-            <h2><code>configSequence</code> typedef</h2>
-            <p>
-                The <code><dfn data-cite="!WebIDL-20161215/#es-sequence">configSequence</dfn></code> data type refers to
-                a custom <code><dfn data-cite="!WebIDL-20161215/#idl-typedefs">typedef</dfn></code> of the
+                The <a>configSequence</a> data
+                type refers to a custom <code><dfn data-cite="!WebIDL-20161215/#idl-typedefs">typedef</dfn></code> such
+                that the type <a>configSequence</a> denotes a <a>sequence</a> of <a>Config</a> objects. The
                 <code><dfn data-cite="!WebIDL-20161215/#es-sequence">sequence</dfn></code> type is defined in
                 [[WebIDL-20161215]].
             </p>
+            <p>
+                The <a>configs</a> attribute then specifies a <a>sequence</a> of two or more <a>Config</a> objects. For the sake of
+                simplicity we assume the list of <a>Config</a> objects is ordered in descending order of utility. That is, the
+                first <a>Config</a> object has the highest assigned utility, while the last <a>Config</a> object has
+                the smallest assigned utility.
+            </p>
+            <pre class="example">
+                [
+                    firstConfig,
+                    secondConfig,
+                    ...
+                ]
+          </pre>
         </section>
+        <!--<section data-link-for="configSequence" data-cite="configSequence">
+            <h2><code>configSequence</code> typedef</h2>
+            <p>
+                The <a>configSequence</a> data type refers to
+                a custom <code><dfn data-cite="!WebIDL-20161215/#idl-typedefs">typedef</dfn></code> such that the type
+                <a>configSequence</a> denotes a <a>sequence</a> of <a>Config</a> objects. The
+                <code><dfn data-cite="!WebIDL-20161215/#es-sequence">sequence</dfn></code> type is defined in
+                [[WebIDL-20161215]].
+            </p>
+        </section>-->
 
     </section>
 
     <section data-dfn-for="Config" data-link-for="Config">
         <h2><dfn>Config</dfn> interface</h2>
         <pre class="idl">
-        interface Config : Dictionary {
-        };
+            [Exposed=Window]
+            interface Config : Dictionary {
+            };
       </pre>
         <p>
             The <a>Config</a> interface specifies a dictionary of key value pairs denoting the environmental settings.
             The <code><dfn data-cite="!WebIDL-20161215/#idl-dictionary">Dictionary</dfn></code> type is defined in
             [[[WebIDL-20161215]]].
         </p>
-        <pre id="settings">
+        <pre class="example">
                 {numWrongAttempts: 1, success: true}
           </pre>
-        <!--<section>
-            <h3>Config</h3>
-            <p>
-                The <a>Config</a> interface specifies a dictionary of key value pairs denoting the environmental settings.
-                The <code><dfn data-cite="!WebIDL-20161215/#idl-dictionary">Dictionary</dfn></code> type is defined in
-                [[WebIDL-20161215]].
-            </p>
-            <pre id="settings">
-                {numWrongAttempts: 1, success: true}
-          </pre>
-        </section>-->
     </section>
 
     <section data-dfn-for="Name">
@@ -383,24 +393,6 @@
     <h2>Related Technologies</h2>
     <i>This section is interactive</i>
 </section>
-
-<!--<section>
-    <h2>References</h2>
-    <i>This section is informative.</i>
-    <p>
-        The railroad diagrams used above were generated using a <a href="https://bottlecaps.de/rr/ui">railroad diagram
-        generator.</a> In the above sections we also refer to <a href="https://www.w3.org/2019/04/dmpl/">Dialogue Manager
-        Programming Language</a> as <a href="https://www.w3.org/2019/04/dmpl/">DMPL</a>. The utility model defined above
-        aligns with work done in <a href="https://escholarship.org/uc/item/1j58g9gx">A Unified Knowledge Representation
-        System for Robot Leraning and Diagloe</a> by <a href="https://shukla.io/">Dr. Nishant Shukla.</a> The primitive
-        data types defined within this spec were influenced by <a href="https://bit.ly/2H35fx3">ISO/IEC 11404.</a>
-
-    </p>
-</section>-->
-
-<!--The <a>Config</a> interface specifies a dictionary of key value pairs denoting the environmental settings.
-The <code><dfn data-cite="!WebIDL-20161215/#idl-dictionary">Dictionary</dfn></code> type is defined in
-[[WebIDL-20161215]].-->
 
 </body>
 </html>
