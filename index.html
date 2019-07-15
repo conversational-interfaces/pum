@@ -174,16 +174,24 @@
             };
       </pre>
         <p>
-            The <a>Config</a> interface specifies a dictionary of key value pairs denoting the environmental settings.
-            The <code><dfn data-cite="!WebIDL-20161215/#idl-dictionary">Dictionary</dfn></code> type is defined in
-            [[[WebIDL-20161215]]].
+            The <a>Config</a> interface specifies a <code><dfn data-cite="!WebIDL-20161215/#idl-dictionary">Dictionary</dfn></code>
+            of <code>key:value</code> pairings denoting the environmental
+            settings. The <code>key</code> of each corresponding pair will always have a
+            <dfn data-cite="!WebIDL-20161215/#idl-DOMString">String</dfn> data type while the <code>value</code> can be
+            any of the numeric or boolean data
+            <dfn data-cite="!WebIDL-20161215/#idl-types">types</dfn> defined in [[[WebIDL-20161215]]].
+            <!--The <code><dfn data-cite="!WebIDL-20161215/#idl-dictionary">Dictionary</dfn></code> type is defined in
+            [[[WebIDL-20161215]]].-->
         </p>
         <pre class="example">
-                {numWrongAttempts: 1, success: true}
-          </pre>
+            {
+                "numWrongAttempts": 1,
+                "success": true
+            }
+        </pre>
     </section>
 
-    <section data-dfn-for="Name">
+    <!--<section data-dfn-for="Name">
         <h2><code><dfn>Name</dfn></code></h2>
         <p>
             A <a>name</a> is a sequence of characters conforming to those in the
@@ -218,7 +226,7 @@
             <img src="diagrams/string.png" alt="String railroad diagram">
             <figcaption>String</figcaption>
         </figure>
-    </section>
+    </section>-->
 
 
 </section>
@@ -233,8 +241,8 @@
     </p>
     <pre class="example">
         [
-          [{numWrongAttempts: 1, success: true}, {numWrongAttempts: 0, success: false}],
-          [{numWrongAttempts: 3, success: false}, {numWrongAttempts: 5, success: true}],
+          [{"numWrongAttempts": 1, "success": true}, {"numWrongAttempts": 0, "success": false}],
+          [{"numWrongAttempts": 3, "success": false}, {"numWrongAttempts": 5, "success": true}],
         ]
       </pre>
 
@@ -246,32 +254,32 @@
         [
             [
               {
-                "`is_pig_visible`": true,
-                "`start_game`": true
+                "is_pig_visible": true,
+                "start_game": true
               },
               {
-                "`is_pig_visible`": false,
-                "`start_game`": true
+                "is_pig_visible": false,
+                "start_game": true
               }
             ],
             [
               {
-                "`is_frog_visible`": true,
-                "`start_game`": true
+                "is_frog_visible": true,
+                "start_game": true
               },
               {
-                "`is_frog_visible`": false,
-                "`start_game`": true
+                "is_frog_visible": false,
+                "start_game": true
               }
             ],
             [
               {
-                "`is_fox_visible`": true,
-                "`start_game`": true
+                "is_fox_visible": true,
+                "start_game": true
               },
               {
-                "`is_fox_visible`": false,
-                "`start_game`": true
+                "is_fox_visible": false,
+                "start_game": true
               }
             ]
         ]
@@ -285,102 +293,102 @@
         [
             [
               {
-                "`start_game`": true
+                "start_game": true
               },
               {
-                "`start_game`": false
+                "start_game": false
               }
             ],
             [
               {
-                "`start_game`": true,
-                "`know_name`": true
+                "start_game": true,
+                "know_name": true
               },
               {
-                "`start_game`": false,
-                "`know_name`": false
+                "start_game": false,
+                "know_name": false
               }
             ],
             [
               {
-                "`start_game`": true,
-                "`say_welcome`": true
+                "start_game": true,
+                "say_welcome": true
               },
               {
-                "`start_game`": false,
-                "`say_welcome`": false
+                "start_game": false,
+                "say_welcome": false
               }
             ],
             [
               {
-                "`remark_current_event`": true
+                "remark_current_event": true
               },
               {
-                "`remark_current_event`": false
+                "remark_current_event": false
               }
             ],
             [
               {
-                "`remark_day_of_week`": true
+                "remark_day_of_week": true
               },
               {
-                "`remark_day_of_week`": false
+                "remark_day_of_week": false
               }
             ],
             [
               {
-                "`remark_day`": true
+                "remark_day": true
               },
               {
-                "`remark_day`": false
+                "remark_day": false
               }
             ],
             [
               {
-                "`remark_weather`": true
+                "remark_weather": true
               },
               {
-                "`remark_weather`": false
+                "remark_weather": false
               }
             ],
             [
               {
-                "`remark_last_seen`": true
+                "remark_last_seen": true
               },
               {
-                "`remark_last_seen`": false
+                "remark_last_seen": false
               }
             ],
             [
               {
-                "`user_knows_name`": true
+                "user_knows_name": true
               },
               {
-                "`user_knows_name`": false
+                "user_knows_name": false
               }
             ],
             [
               {
-                "`asked_name_reminder`": true
+                "asked_name_reminder": true
               },
               {
-                "`asked_name_reminder`": false
+                "asked_name_reminder": false
               }
             ],
             [
               {
-                "`num_interaction`": 3
+                "num_interaction": 3
               },
               {
-                "`num_interaction`": 12
+                "num_interaction": 12
               }
             ],
             [
               {
-                "`num_interaction`": 3
+                "num_interaction": 3
               },
               {
-                "`num_interaction`": -6
+                "num_interaction": -6
               }
             ]
           ]
@@ -391,7 +399,7 @@
 
 <section>
     <h2>Related Technologies</h2>
-    <i>This section is interactive</i>
+    <i>This section is informative.</i>
 </section>
 
 </body>
