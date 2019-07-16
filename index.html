@@ -22,7 +22,12 @@
                     status: "W3C CG-FINAL",
                     date: "16 April, 2019",
                     publisher: "W3C",
-                }
+                },
+                "Rank SVM": {
+                    title: "Rank SVM",
+                    href: "https://www.cs.cornell.edu/people/tj/svm_light/svm_rank.html",
+                    publisher: "Cornell University, Department of Computer Science"
+                },
             },
             wg: "Conversational Interfaces Working Group",
             wgURI: "https://www.w3.org/community/conv/",
@@ -51,8 +56,7 @@
 
 <section id='abstract'>
     <p>
-        This specification defines the syntax and semantics for <code><dfn data-cite="!Nishant Shukla#">
-        Utility Models</dfn></code> that are used to create and drive conversational experiences.
+        This specification defines the syntax and semantics for <a>Utility Models</a> that are used to create and drive conversational experiences.
         <a>Utility Models</a> allow authors to encode preferences over states of the world, enabling task-oriented
         programming languages to autonomously drive agents towards settings with the highest possible utility.
     </p>
@@ -81,10 +85,10 @@
         <h2>Scope</h2>
         <i>This section is informative.</i>
         <p>
-            This document is limited to specifying the syntax and semantics of designing and incorporating utility
-            into any task-oriented programming language. One example application of Utility Models arises in chat-bot
-            settings where authors are able to specify preferences between interactions allowing for a more fluid and
-            dynamic conversation.
+            This document is limited to specifying the syntax and semantics of designing and incorporating <code><a>
+            Utility Models</a></code> into any <a href="http://www.itasks.org/">Task-Oriented</a> programming language.
+            One example application of <code><a> Utility Models</a></code> arises in chat-bot settings where authors are
+            able to specify preferences between interactions allowing for a more fluid and dynamic conversation.
         </p>
     </section>
 
@@ -92,7 +96,9 @@
         <h2>Goals and Motivation</h2>
         <i>This section is informative.</i>
         <p>
-
+            Designing <code><a>Utility Models</a></code> allows authors to create intelligent self-driven agents. In a
+            teacher-student setting, this allows agents to understand where a user is having trouble and provide
+            assistance to help them overcome said obstacle.
         </p>
     </section>
 </section>
@@ -100,33 +106,35 @@
 
 <section>
     <h2>Utility Model Format</h2>
+    <i>This section is normative.</i>
     <section data-dfn-for="Utility" data-link-for="Utility">
-        <h2><dfn>Utility</dfn> interface</h2>
-        <i>This section is normative.</i>
+        <h2><dfn>Utility</dfn></h2>
+        <p><a>Utility</a> is a <a>sequence</a> of <a>Pair</a> objects.</p>
         <pre class="idl">
-            [Exposed=Window]
+            typedef sequence< Pair > Utility;
+            <!--[Exposed=Global]
             interface Utility {
               attribute Pairs preferences;
-            };
-      </pre>
-        <section>
-            <h3><dfn>preferences</dfn> attribute</h3>
-            <p>
-                The <a>preferences</a> attribute specifies a <a>Pairs</a> object denoting a ranking configuration of all
-                provided examples. See <a>Pairs</a> below.
-            </p>
-        </section>
+            };-->
+        </pre>
+
         <pre class="example">
-            Pair
+            [
+                <a>Pair</a>1,
+                <a>Pair</a>2,
+                <a>Pair</a>3,
+                ...
+            ]
         </pre>
     </section>
 
-    <section data-dfn-for="Pairs" data-link-for="Pairs">
-        <h2><dfn>Pairs</dfn> interface</h2>
+    <section data-dfn-for="Pair" data-link-for="Pair">
+        <h2><dfn>Pair</dfn> interface</h2>
         <pre class="idl">
             typedef sequence< Config > configSequence;
-            [Exposed=Window]
-            interface Pairs {
+
+            [Exposed=Global]
+            interface Pair {
                 attribute configSequence configs;
             };
         </pre>
@@ -141,37 +149,25 @@
             </p>
             <p>
                 The <a>configs</a> attribute then specifies a <a>sequence</a> of two or more <a>Config</a> objects. For the sake of
-                simplicity we assume the list of <a>Config</a> objects is ordered in descending order of utility. That is, the
+                simplicity we assume the <a>sequence</a> of <a>Config</a> objects is ordered in descending order of utility. That is, the
                 first <a>Config</a> object has the highest assigned utility, while the last <a>Config</a> object has
                 the smallest assigned utility.
             </p>
             <pre class="example">
                 [
-                    firstConfig,
-                    secondConfig,
+                    <a>Config</a>1,
+                    <a>Config</a>2,
+                    <a>Config</a>3,
                     ...
                 ]
           </pre>
         </section>
-        <!--<section data-link-for="configSequence" data-cite="configSequence">
-            <h2><code>configSequence</code> typedef</h2>
-            <p>
-                The <a>configSequence</a> data type refers to
-                a custom <code><dfn data-cite="!WebIDL-20161215/#idl-typedefs">typedef</dfn></code> such that the type
-                <a>configSequence</a> denotes a <a>sequence</a> of <a>Config</a> objects. The
-                <code><dfn data-cite="!WebIDL-20161215/#es-sequence">sequence</dfn></code> type is defined in
-                [[WebIDL-20161215]].
-            </p>
-        </section>-->
-
     </section>
 
     <section data-dfn-for="Config" data-link-for="Config">
-        <h2><dfn>Config</dfn> interface</h2>
+        <h2><dfn>Config</dfn> typedef</h2>
         <pre class="idl">
-            [Exposed=Window]
-            interface Config : Dictionary {
-            };
+            typedef Dictionary Config;
       </pre>
         <p>
             The <a>Config</a> interface specifies a <code><dfn data-cite="!WebIDL-20161215/#idl-dictionary">Dictionary</dfn></code>
@@ -180,8 +176,6 @@
             <dfn data-cite="!WebIDL-20161215/#idl-DOMString">String</dfn> data type while the <code>value</code> can be
             any of the numeric or boolean data
             <dfn data-cite="!WebIDL-20161215/#idl-types">types</dfn> defined in [[[WebIDL-20161215]]].
-            <!--The <code><dfn data-cite="!WebIDL-20161215/#idl-dictionary">Dictionary</dfn></code> type is defined in
-            [[[WebIDL-20161215]]].-->
         </p>
         <pre class="example">
             {
@@ -190,45 +184,6 @@
             }
         </pre>
     </section>
-
-    <!--<section data-dfn-for="Name">
-        <h2><code><dfn>Name</dfn></code></h2>
-        <p>
-            A <a>name</a> is a sequence of characters conforming to those in the
-            <code><dfn data-cite="!xml/#idl-dictionary">XML</dfn></code> standard [[xml]]. Below is an example with along
-            with its corresponding <code><a href="https://bottlecaps.de/rr/ui">railroad diagram</a></code>.
-
-        </p>
-        <blockquote>
-	            <pre>
-	                <a>name</a> ::= [ <a href="http://www.w3.org/TR/xml-names/#NT-NCName">http://www.w3.org/TR/xml-names/#NT-NCName</a> ]
-                </pre>
-        </blockquote>
-        <figure id="name-railroad">
-            <img src="diagrams/name.png" alt="Name rail-road diagram">
-            <figcaption>Name</figcaption>
-        </figure>
-    </section>
-
-    <section data-dfn-for="String">
-        <h2><code><dfn>String</dfn></code></h2>
-        <p>
-            A <a>string</a> literal represents a finite sequence of characters.
-            It is surrounded by starting and ending quotation marks. Below is an example with along
-            with its corresponding <code><a href="https://bottlecaps.de/rr/ui">railroad diagram</a></code>.
-        </p>
-        <blockquote>
-	            <pre>
-	                <a>string</a> :: = '"' <a>name</a> '"'
-                </pre>
-        </blockquote>
-        <figure id="string-railroad">
-            <img src="diagrams/string.png" alt="String railroad diagram">
-            <figcaption>String</figcaption>
-        </figure>
-    </section>-->
-
-
 </section>
 
 <section>
@@ -247,8 +202,8 @@
       </pre>
 
     <p>
-        Being able to assign utility allows us to indirectly specify a desired trajectory in which animating all characters
-        in a game setting has higher preferences than beginning the game.
+        Being able to assign utility allows us to indirectly specify a desired trajectory. In the following example,
+        animating all characters in a game setting has higher preferences than beginning the game.
     </p>
     <pre class="example">
         [
@@ -287,7 +242,7 @@
 
     <p>
         When designing the utilities, the paired preferences do not have to belong to the same topic. By providing a
-        variety of examples, the utility model is able to generalize to a richer interactive experience.
+        variety of examples, the <a>Utility Model</a> is able to generalize to a richer interactive experience.
     </p>
     <pre class="example">
         [
@@ -400,6 +355,236 @@
 <section>
     <h2>Related Technologies</h2>
     <i>This section is informative.</i>
+    <section>
+        <h2><code><dfn data-cite="!Nishant Shukla#">Utility Models</dfn></code> vs. <code><dfn data-cite="!Rank SVM#">Rank-SVM</dfn></code></h2>
+        <!--<p>
+            In the following example we show how the syntax and semantics for the <a>Utility Model</a> defined within this
+            document allow us to specify the same set of feature preferences generated by
+            <code><a>Rank-SVM</a></code> in a format that's simpler and easier to adopt.
+        </p>-->
+        <p>
+            In <code><a>Rank-SVM</a></code> the following set of feature vectors generates the following preferences. Note,
+            in the following example the sidelined # 1A, #1B, and # 1C is simply naming convention for the purposes of demonstration.
+        </p>
+        <pre class="example" title="Rank-SVM Feature Vectors">
+            3 qid:1 1:1 2:1 3:0 4:0.2 5:0 # 1A
+            2 qid:1 1:0 2:0 3:1 4:0.1 5:1 # 1B
+            1 qid:1 1:0 2:1 3:0 4:0.4 5:0 # 1C
+            1 qid:1 1:0 2:0 3:1 4:0.3 5:0 # 1D
+            1 qid:2 1:0 2:0 3:1 4:0.2 5:0 # 2A
+            2 qid:2 1:1 2:0 3:1 4:0.4 5:0 # 2B
+            1 qid:2 1:0 2:0 3:1 4:0.1 5:0 # 2C
+            1 qid:2 1:0 2:0 3:1 4:0.2 5:0 # 2D
+            2 qid:3 1:0 2:0 3:1 4:0.1 5:1 # 3A
+            3 qid:3 1:1 2:1 3:0 4:0.3 5:0 # 3B
+            4 qid:3 1:1 2:0 3:0 4:0.4 5:1 # 3C
+            1 qid:3 1:0 2:1 3:1 4:0.5 5:0 # 3D
+        </pre>
+        <pre class="example" title="Rank-SVM Generated Preferences">
+            1A>1B, 1A>1C, 1A>1D, 1B>1C, 1B>1D, 2B>2A, 2B>2C, 2B>2D, 3C>3A, 3C>3B, 3C>3D, 3B>3A, 3B>3D, 3A>3D
+        </pre>
+        <p>
+            The same set of feature preferences can be specified using the <a>Utility Model</a> syntax and semantics
+            defined within this document in a more readable format.
+        </p>
+        <pre class="example" title="Utility Model">
+            [
+                [
+                    {
+                        "1A_feature_1": 1,
+                        "1A_feature_2": 2,
+                        "1A_feature_3": 0,
+                        "1A_feature_4": 0.2
+                        "1A_feature_5": 0
+                    },
+                    {
+                        "1B_feature_1": 0,
+                        "1B_feature_2": 0,
+                        "1B_feature_3": 1,
+                        "1B_feature_4": 0.1
+                        "1B_feature_5": 1
+                    }
+                ],
+                [
+                    {
+                        "1A_feature_1": 1,
+                        "1A_feature_2": 2,
+                        "1A_feature_3": 0,
+                        "1A_feature_4": 0.2
+                        "1A_feature_5": 0
+                    },
+                    {
+                        "1C_feature_1": 0,
+                        "1C_feature_2": 1,
+                        "1C_feature_3": 0,
+                        "1C_feature_4": 0.4
+                        "1C_feature_5": 0
+                    }
+                ],
+                [
+                    {
+                        "1A_feature_1": 1,
+                        "1A_feature_2": 2,
+                        "1A_feature_3": 0,
+                        "1A_feature_4": 0.2
+                        "1A_feature_5": 0
+                    },
+                    {
+                        "1D_feature_1": 0,
+                        "1D_feature_2": 0,
+                        "1D_feature_3": 1,
+                        "1D_feature_4": 0.3
+                        "1D_feature_5": 0
+                    }
+                ],
+                [
+                    {
+                        "2B_feature_1": 0,
+                        "2B_feature_2": 0,
+                        "2B_feature_3": 1,
+                        "2B_feature_4": 0.2
+                        "2B_feature_5": 0
+                    },
+                    {
+                        "2A_feature_1": 1,
+                        "2A_feature_2": 0,
+                        "2A_feature_3": 1,
+                        "2A_feature_4": 0.4
+                        "2A_feature_5": 0
+                    }
+                ],
+                [
+                    {
+                        "2B_feature_1": 0,
+                        "2B_feature_2": 0,
+                        "2B_feature_3": 1,
+                        "2B_feature_4": 0.2
+                        "2B_feature_5": 0
+                    },
+                    {
+                        "2C_feature_1": 0,
+                        "2C_feature_2": 0,
+                        "2C_feature_3": 1,
+                        "2C_feature_4": 0.1
+                        "2C_feature_5": 0
+                    }
+                ],
+                [
+                    {
+                        "2B_feature_1": 0,
+                        "2B_feature_2": 0,
+                        "2B_feature_3": 1,
+                        "2B_feature_4": 0.2
+                        "2B_feature_5": 0
+                    },
+                    {
+                        "2D_feature_1": 0,
+                        "2D_feature_2": 0,
+                        "2D_feature_3": 1,
+                        "2D_feature_4": 0.2
+                        "2D_feature_5": 0
+                    }
+                ],
+                [
+                    {
+                        "3C_feature_1": 1,
+                        "3C_feature_2": 0,
+                        "3C_feature_3": 0,
+                        "3C_feature_4": 0.4
+                        "3C_feature_5": 1
+                    },
+                    {
+                        "3A_feature_1": 0,
+                        "3A_feature_2": 0,
+                        "3A_feature_3": 1,
+                        "3A_feature_4": 0.1
+                        "3A_feature_5": 1
+                    }
+                ],
+                [
+                    {
+                        "3C_feature_1": 1,
+                        "3C_feature_2": 0,
+                        "3C_feature_3": 0,
+                        "3C_feature_4": 0.4
+                        "3C_feature_5": 1
+                    },
+                    {
+                        "3B_feature_1": 1,
+                        "3B_feature_2": 1,
+                        "3B_feature_3": 0,
+                        "3B_feature_4": 0.3
+                        "3B_feature_5": 0
+                    }
+                ],
+                [
+                    {
+                        "3C_feature_1": 1,
+                        "3C_feature_2": 0,
+                        "3C_feature_3": 0,
+                        "3C_feature_4": 0.4
+                        "3C_feature_5": 1
+                    },
+                    {
+                        "3D_feature_1": 0,
+                        "3D_feature_2": 1,
+                        "3D_feature_3": 1,
+                        "3D_feature_4": 0.5
+                        "3D_feature_5": 0
+                    }
+                ],
+                [
+                    {
+                        "3B_feature_1": 1,
+                        "3B_feature_2": 1,
+                        "3B_feature_3": 0,
+                        "3B_feature_4": 0.3
+                        "3B_feature_5": 0
+                    },
+                    {
+                        "3A_feature_1": 0,
+                        "3A_feature_2": 0,
+                        "3A_feature_3": 1,
+                        "3A_feature_4": 0.1
+                        "3A_feature_5": 1
+                    }
+                ],
+                [
+                    {
+                        "3B_feature_1": 1,
+                        "3B_feature_2": 1,
+                        "3B_feature_3": 0,
+                        "3B_feature_4": 0.3
+                        "3B_feature_5": 0
+                    },
+                    {
+                        "3D_feature_1": 0,
+                        "3D_feature_2": 1,
+                        "3D_feature_3": 1,
+                        "3D_feature_4": 0.5
+                        "3D_feature_5": 0
+                    }
+                ],
+                [
+                    {
+                        "3A_feature_1": 0,
+                        "3A_feature_2": 0,
+                        "3A_feature_3": 1,
+                        "3A_feature_4": 0.1
+                        "3A_feature_5": 1
+                    },
+                    {
+                        "3D_feature_1": 0,
+                        "3D_feature_2": 1,
+                        "3D_feature_3": 1,
+                        "3D_feature_4": 0.5
+                        "3D_feature_5": 0
+                    }
+                ]
+            ]
+
+        </pre>
+    </section>
 </section>
 
 </body>
